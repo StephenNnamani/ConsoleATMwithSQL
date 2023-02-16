@@ -12,7 +12,7 @@ namespace ATMApp.App
         static void Main(string[] args)
         {
             
-            ATMApp atmApp = new ATMApp();
+            ATMAppServices atmApp = new ATMAppServices();
             //atmApp.InitializeData();
             atmApp.Run();              
            

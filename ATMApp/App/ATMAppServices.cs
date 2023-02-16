@@ -48,10 +48,13 @@ namespace ATMApp
         //    //_listOfTransactions = new List<Transaction>();
         //}
 
-        public async Task<UserAccount> CheckUserCardNumAndPassword()
+        public async Task<UserAccount> CheckUserCardNumAndPassword(UserAccount user)
         {
+            var sqlConn = await _dbContext.OpenConnection();
+            sqlConn.Open();
 
-            return ;
+
+            return;
         }
 
         //public void CheckUserCardNumAndPassword()
