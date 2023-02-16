@@ -11,7 +11,7 @@ using System.Transactions;
 
 namespace ATMApp.App
 {
-    internal class ATMDbContext
+    internal class ATMDbContext : IDisposable
     {
         private readonly string _connString;
         private SqlConnection _dbConnection = null;

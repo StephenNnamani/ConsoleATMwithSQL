@@ -1,4 +1,5 @@
-﻿using System;
+﻿using ATMApp.Domain.Entities;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -8,6 +9,6 @@ namespace ATMApp.Domain.Interfaces
 {
     public interface IUserLogin
     {
-        void CheckUserCardNumAndPassword();
+        Task<UserAccount> CheckUserCardNumAndPassword();
     }
 }

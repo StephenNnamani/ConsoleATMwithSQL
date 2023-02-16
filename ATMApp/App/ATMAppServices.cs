@@ -1,4 +1,5 @@
-﻿using ATMApp.Domain.Entities;
+﻿using ATMApp.App;
+using ATMApp.Domain.Entities;
 using ATMApp.Domain.Enums;
 using ATMApp.Domain.Interfaces;
 using ATMApp.UI;
@@ -7,19 +8,22 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading;
+using System.Threading.Tasks;
 
 namespace ATMApp
 {
-    public class ATMApp : IUserLogin, IUserAccountActions, ITransaction
+    public class ATMAppServices : IUserLogin, IUserAccountActions, ITransaction
     {
+        private readonly ATMDbContext _dbContext;
+        private bool _disposed;
         //private List<UserAccount> userAccountList;
         private UserAccount selectedAccount;
         private List<Transaction> _listOfTransactions;
         private const decimal minimumKeptAmount = 500;
         private readonly AppScreen screen;
 
-        
-        public ATMApp()
+
+        public ATMAppServices()
         {
             screen = new AppScreen();
         }
@@ -44,9 +48,10 @@ namespace ATMApp
         //    //_listOfTransactions = new List<Transaction>();
         //}
 
-        public void CheckUserCardNumAndPassword()
+        public async Task<UserAccount> CheckUserCardNumAndPassword()
         {
 
+            return ;
         }
 
         //public void CheckUserCardNumAndPassword()
