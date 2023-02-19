@@ -13,7 +13,16 @@ namespace ATMApp.App
         {
             
             ATMAppServices atmApp = new ATMAppServices();
-            //atmApp.InitializeData();
+            try
+            {
+                atmApp.CreateDB();
+            }
+            catch
+            {
+                Console.Clear();
+            }
+            atmApp.CreateTable();
+            atmApp.InsertUsers();
             atmApp.Run();              
            
         }

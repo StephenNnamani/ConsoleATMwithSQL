@@ -9,6 +9,6 @@ namespace ATMApp.Domain.Interfaces
 {
     public interface IUserLogin
     {
-        Task<UserAccount> CheckUserCardNumAndPassword(UserAccount user);
+        Task<UserAccount> CheckUserCardNumAndPassword();
     }
 }

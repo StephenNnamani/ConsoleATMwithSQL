@@ -4,8 +4,10 @@ using ATMApp.Domain.Enums;
 using ATMApp.Domain.Interfaces;
 using ATMApp.UI;
 using ConsoleTables;
+using Microsoft.Data.SqlClient;
 using System;
 using System.Collections.Generic;
+using System.Data;
 using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
@@ -21,13 +23,14 @@ namespace ATMApp
         private List<Transaction> _listOfTransactions;
         private const decimal minimumKeptAmount = 500;
         private readonly AppScreen screen;
+        private List<UserAccount> userAccountList;
 
 
         public ATMAppServices()
         {
             screen = new AppScreen();
         }
-
+        
         public void Run()
         {
             AppScreen.Welcome();
@@ -39,24 +42,130 @@ namespace ATMApp
                 ProcessMenuoption();
             }
         }
-        //public void InitializeData()
-        //{
-        //    //userAccountList = new List<UserAccount>
-        //    //{
-                
-        //    //};
-        //    //_listOfTransactions = new List<Transaction>();
-        //}
-
-        public async Task<UserAccount> CheckUserCardNumAndPassword(UserAccount user)
+        public async Task CreateDB()
         {
             var sqlConn = await _dbContext.OpenConnection();
-            sqlConn.Open();
+            //sqlConn.Open();
 
+            string insertQuery =
+                $"CREATE DATABASE User";
 
-            return;
+            SqlCommand command = new SqlCommand(insertQuery, sqlConn);
+
+            await command.ExecuteNonQueryAsync();
+
+            string usedIdQuery =
+                $"SELECT SCOPE_IDENTITY();";
+
+            command.CommandText = usedIdQuery;
+
+            command.ExecuteReader(CommandBehavior.CloseConnection);
+
         }
 
+        public async Task CreateTable()
+        {
+            var sqlConn = await _dbContext.OpenConnection();
+            //sqlConn.Open();
+
+            string insertQuery =
+                $"CREATE TABLE User(" +
+                    $"[Id][int] NULL," +
+                    $"[Firstname][nvarchar] (50) NULL," +
+                    $"[Lastname][nvarchar] (50) NULL," +
+                    $"[AccountNumber][bigint] NULL," +
+                    $"[CardNumber][bigint] NULL," +
+                    $"[CardPin][int] NULL," +
+                    $"[AccountBalance][money] NULL," +
+                    $"[isLocked][bit] NOT NULL" +
+                    $") ON[PRIMARY]";
+
+            SqlCommand command = new SqlCommand(insertQuery, sqlConn);
+
+            await command.ExecuteNonQueryAsync();
+
+            string usedIdQuery =
+                $"SELECT SCOPE_IDENTITY();";
+
+            command.CommandText = usedIdQuery;
+
+            command.ExecuteReader(CommandBehavior.CloseConnection);
+            
+        }
+
+        public async Task InsertUsers()
+        {
+            var sqlConn = await _dbContext.OpenConnection();
+            //sqlConn.Open();
+
+            string insertQuery =
+                $"INSERT INTO User(Id, Firstname, Lastname, AccountNumber, CardNumber, CardPin, AccountBalance, isLocked)," +
+                $"VALUES(1, 'Stephen', 'Nnamani', 1234567890, 1234512345, 1234, 10000000, 0);" +
+
+                $"INSERT INTO User(Id, Firstname, Lastname, AccountNumber, CardNumber, CardPin, AccountBalance, isLocked)" +
+                $"VALUES(1, 'Stanley', 'Eze', 0987654321, 1234123455, 0812, 11000, 0);" +
+
+                $"INSERT INTO User(Id, Firstname, Lastname, AccountNumber, CardNumber, CardPin, AccountBalance, isLocked)" +
+                $"VALUES(1, 'Nneka', 'Igwe', 1234012340, 1111211112, 0123, 571000, 0);" +
+
+                $"INSERT INTO User(Id, Firstname, Lastname, AccountNumber, CardNumber, CardPin, AccountBalance, isLocked)" +
+                $"VALUES(1, 'Caleb', 'Okeke', 2222522225, 0000500005, 0321, 167000, 0);" +
+
+                $"INSERT INTO User(Id, Firstname, Lastname, AccountNumber, CardNumber, CardPin, AccountBalance, isLocked)" +
+                $"VALUES(1, 'Amara', 'Favour', 9999099990, 0101010101, 0000, 718000, 0); " +
+
+                $"INSERT INTO User(Id, Firstname, Lastname, AccountNumber, CardNumber, CardPin, AccountBalance, isLocked)" +
+                $"VALUES(1, 'Vincent', 'Kay', 9999099990, 0101010101, 0000, 718000, 0); ";
+
+            SqlCommand command = new SqlCommand(insertQuery, sqlConn);
+
+            await command.ExecuteNonQueryAsync();
+
+            string usedIdQuery =
+                $"SELECT SCOPE_IDENTITY();";
+
+            command.CommandText = usedIdQuery;
+
+            command.ExecuteReader(CommandBehavior.CloseConnection);
+
+        }
+
+        public async Task<UserAccount> CheckUserCardNumAndPassword()
+        {
+            Console.WriteLine("Type in your Card Number");
+            string cardNum = Console.ReadLine();
+            Console.WriteLine("Type in your Card Pin");
+            string cardPin = Console.ReadLine();
+
+            var sqlConn = await _dbContext.OpenConnection();
+            //sqlConn.Open();
+
+            string insertQuery =
+                $"CREATE TABLE ATMUser(" +
+                    $"[Id][int] NULL," +
+                    $"[Firstname][nvarchar] (50) NULL," +
+                    $"[Lastname][nvarchar] (50) NULL," +
+                    $"[AccountNumber][bigint] NULL," +
+                    $"[CardNumber][bigint] NULL," +
+                    $"[CardPin][int] NULL," +
+                    $"[AccountBalance][money] NULL," +
+                    $"[isLocked][bit] NOT NULL" +
+                    $") ON[PRIMARY]";
+
+            SqlCommand command = new SqlCommand(insertQuery, sqlConn);
+
+            await command.ExecuteNonQueryAsync();
+
+            string usedIdQuery =
+                $"SELECT SCOPE_IDENTITY();";
+
+            command.CommandText = usedIdQuery;
+
+            command.ExecuteReader(CommandBehavior.CloseConnection);
+            UserAccount UserAccounts = new UserAccount();
+            return UserAccounts;
+        }
+        
         //public void CheckUserCardNumAndPassword()
         //{
         //    bool isCorrectLogin = false;
@@ -100,7 +209,7 @@ namespace ATMApp
         //        }
         //    }            
         //}
-        
+
         private void ProcessMenuoption()
         {
             switch(Validator.Convert<int>("an option:"))
