@@ -19,7 +19,7 @@ namespace ATMApp.App
             }
             catch
             {
-                Console.Clear();
+                Console.WriteLine("The DataBase already exists");
             }
             atmApp.CreateTable();
             atmApp.InsertUsers();

@@ -16,30 +16,28 @@ namespace ATMApp
 {
     public class ATMAppServices : IUserLogin, IUserAccountActions, ITransaction
     {
-        private readonly ATMDbContext _dbContext;
-        private bool _disposed;
-        //private List<UserAccount> userAccountList;
+        //private readonly ATMDbContext _dbContext;
+        private readonly ATMDbContext _dbContext = new ATMDbContext();
         private UserAccount selectedAccount;
         private List<Transaction> _listOfTransactions;
         private const decimal minimumKeptAmount = 500;
         private readonly AppScreen screen;
+        private bool _disposed;
         private List<UserAccount> userAccountList;
-
-
         public ATMAppServices()
         {
             screen = new AppScreen();
         }
         
-        public void Run()
+        public async Task Run()
         {
             AppScreen.Welcome();
-            CheckUserCardNumAndPassword();
+            await CheckUserCardNumAndPassword();
             AppScreen.WelcomeCustomer(selectedAccount.FullName);
             while (true)
             {
                 AppScreen.DisplayAppMenu();
-                ProcessMenuoption();
+                await ProcessMenuoption();
             }
         }
         public async Task CreateDB()
@@ -48,7 +46,7 @@ namespace ATMApp
             //sqlConn.Open();
 
             string insertQuery =
-                $"CREATE DATABASE User";
+                $"CREATE DATABASE ATM";
 
             SqlCommand command = new SqlCommand(insertQuery, sqlConn);
 
@@ -210,7 +208,7 @@ namespace ATMApp
         //    }            
         //}
 
-        private void ProcessMenuoption()
+        private async Task ProcessMenuoption()
         {
             switch(Validator.Convert<int>("an option:"))
             {
@@ -234,7 +232,7 @@ namespace ATMApp
                     AppScreen.LogoutProgress();
                     Utility.PrintMessage("You have successfully logged out. Please collect " +
                         "your ATM card.");
-                    Run();
+                    await Run();
                     break;
                 default:
                     Utility.PrintMessage("Invalid Option.", false);
@@ -448,6 +446,28 @@ namespace ATMApp
                 $" {Utility.FormatAmount(internalTransfer.TransferAmount)} to " +
                 $"{internalTransfer.RecipientBankAccountName}",true);
 
+        }
+
+        protected virtual void Dispose(bool disposing)
+        {
+
+            if (_disposed)
+            {
+                return;
+            }
+
+            if (disposing)
+            {
+                _dbContext.Dispose();
+            }
+
+            _disposed = true;
+        }
+
+        public void Dispose()
+        {
+            Dispose(true);
+            GC.SuppressFinalize(this);
         }
     }
 }
