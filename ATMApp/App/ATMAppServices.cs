@@ -46,7 +46,7 @@ namespace ATMApp
             //sqlConn.Open();
 
             string insertQuery =
-                $"CREATE DATABASE ATM";
+                $"DROP DATABASE ATM";
 
             SqlCommand command = new SqlCommand(insertQuery, sqlConn);
 
@@ -139,16 +139,7 @@ namespace ATMApp
             //sqlConn.Open();
 
             string insertQuery =
-                $"CREATE TABLE ATMUser(" +
-                    $"[Id][int] NULL," +
-                    $"[Firstname][nvarchar] (50) NULL," +
-                    $"[Lastname][nvarchar] (50) NULL," +
-                    $"[AccountNumber][bigint] NULL," +
-                    $"[CardNumber][bigint] NULL," +
-                    $"[CardPin][int] NULL," +
-                    $"[AccountBalance][money] NULL," +
-                    $"[isLocked][bit] NOT NULL" +
-                    $") ON[PRIMARY]";
+                $"SELECT * From User";
 
             SqlCommand command = new SqlCommand(insertQuery, sqlConn);
 
